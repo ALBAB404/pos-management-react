@@ -7,6 +7,7 @@ const Master = () => {
     <>
       <NavBar />
       <div id="layoutSidenav">
+       
         <SideBar />
         <div id="layoutSidenav_content">
           <main>
