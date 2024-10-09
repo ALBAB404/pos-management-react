@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {useNavigate} from "react-router-dom";
 
 const Login = () => {
   const [input, setInput] = useState({});
-
+  const navigate = useNavigate();
   const handleInput = (e) => {
     setInput(prevState => ({...prevState, [e.target.name] : e.target.value }));
   };
@@ -11,9 +12,20 @@ const Login = () => {
   const handleLogin = async(e) => {
      e.preventDefault();
      const response =  await axios.post('http://127.0.0.1:8000/api/login', input)
-     console.log(response.data);
-     
+     localStorage.email = response.data.name;
+     localStorage.phone = response.data.phone;
+     localStorage.photo = response.data.photo;
+     localStorage.token = response.data.token;
+     window.location.reload();
   }
+
+  useEffect(() => {
+    console.log(localStorage.token)
+    if (localStorage.token) {
+      navigate("/");
+    }
+  }, [])
+  
 
   return (
     <div id="layoutAuthentication">
