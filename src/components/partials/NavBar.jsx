@@ -1,9 +1,36 @@
 import $ from 'jquery';
+import Swal from 'sweetalert2'
+import axios from "axios";
 
 const NavBar = () => {
 
 const handleToggle = () => {
   $('body').toggleClass('sb-sidenav-toggled')
+}
+
+const handleLogout = () => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You will be logout!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, logout!"
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const response =  await axios.post('http://127.0.0.1:8000/api/logout')
+        localStorage.removeItem('email');
+        localStorage.removeItem('name');
+        localStorage.removeItem('phone');
+        localStorage.removeItem('token');
+        window.location.reload();
+       } catch (error) {
+         console.log(error);
+       }
+    }
+  });
 }
 
   return (
@@ -67,9 +94,9 @@ const handleToggle = () => {
               <hr className="dropdown-divider" />
             </li>
             <li>
-              <a className="dropdown-item" href="#!">
+              <button onClick={handleLogout} className="dropdown-item" href="#!">
                 Logout
-              </a>
+              </button>
             </li>
           </ul>
         </li>

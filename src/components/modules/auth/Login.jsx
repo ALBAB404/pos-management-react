@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 
 const Login = () => {
   const [input, setInput] = useState({});
+  const [errors, setError] = useState({});
   const navigate = useNavigate();
   const handleInput = (e) => {
     setInput(prevState => ({...prevState, [e.target.name] : e.target.value }));
@@ -11,12 +12,20 @@ const Login = () => {
 
   const handleLogin = async(e) => {
      e.preventDefault();
-     const response =  await axios.post('http://127.0.0.1:8000/api/login', input)
-     localStorage.email = response.data.name;
-     localStorage.phone = response.data.phone;
-     localStorage.photo = response.data.photo;
-     localStorage.token = response.data.token;
-     window.location.reload();
+     try {
+      const response =  await axios.post('http://127.0.0.1:8000/api/login', input)
+      localStorage.email = response.data.name;
+      localStorage.phone = response.data.phone;
+      localStorage.photo = response.data.photo;
+      localStorage.token = response.data.token;
+      window.location.reload();
+     } catch (error) {
+      console.log(error);
+      
+      if (error.response.status == 422) {
+        setError(error.response.data.errors)
+      }
+     }
   }
 
   useEffect(() => {
@@ -44,7 +53,7 @@ const Login = () => {
                     <form>
                       <div className="form-floating mb-3">
                         <input
-                          className="form-control"
+                          className={errors?.email != undefined ? "form-control is-invalid" : "form-control"}
                           id="inputEmail"
                           type={"email"}
                           name={"email"}
@@ -52,11 +61,12 @@ const Login = () => {
                           onChange={handleInput}
                           placeholder="name@example.com"
                         />
+                        <p className="text-danger">{ errors?.email != undefined ? errors?.email[0] : null }</p>
                         <label htmlFor="inputEmail">Email/Phone</label>
                       </div>
                       <div className="form-floating mb-3">
                         <input
-                          className="form-control"
+                          className={errors?.password != undefined ? "form-control is-invalid" : "form-control"}
                           id="inputPassword"
                           type={"password"}
                           name={"password"}
@@ -64,6 +74,7 @@ const Login = () => {
                           onChange={handleInput}
                           placeholder="Password"
                         />
+                        <p className="text-danger">{ errors?.password != undefined ? errors?.password[0] : null }</p>
                         <label htmlFor="inputPassword">Password</label>
                       </div>
                       <div className="d-grid">
