@@ -1,10 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import {useNavigate} from "react-router-dom";
+import Constants from "@/Constants";
+
 
 const Login = () => {
   const [input, setInput] = useState({});
   const [errors, setError] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const handleInput = (e) => {
     setInput(prevState => ({...prevState, [e.target.name] : e.target.value }));
@@ -13,15 +16,18 @@ const Login = () => {
   const handleLogin = async(e) => {
      e.preventDefault();
      try {
-      const response =  await axios.post('http://127.0.0.1:8000/api/login', input)
+      setIsLoading(true);
+      const response =  await axios.post(`${Constants.BASE_URL}/login`, input)
+      console.log(response);
+      
       localStorage.email = response.data.name;
       localStorage.phone = response.data.phone;
       localStorage.photo = response.data.photo;
       localStorage.token = response.data.token;
       window.location.reload();
-     } catch (error) {
-      console.log(error);
-      
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
       if (error.response.status == 422) {
         setError(error.response.data.errors)
       }
@@ -29,7 +35,6 @@ const Login = () => {
   }
 
   useEffect(() => {
-    console.log(localStorage.token)
     if (localStorage.token) {
       navigate("/");
     }
@@ -78,7 +83,15 @@ const Login = () => {
                         <label htmlFor="inputPassword">Password</label>
                       </div>
                       <div className="d-grid">
-                        <button className="btn btn-danger" onClick={handleLogin}>Login</button>
+                      <button
+                        className="btn btn-danger"
+                        onClick={handleLogin}
+                        dangerouslySetInnerHTML={{
+                          __html: isLoading
+                            ? '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> Login....'
+                            : 'Login',
+                        }}
+                      />
                       </div>
                     </form>
                   </div>

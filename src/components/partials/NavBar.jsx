@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import Swal from 'sweetalert2'
-import axios from "axios";
+import Constants from "@/Constants";
+import axiosInstance from '../../axiosInterceptors';
+
 
 const NavBar = () => {
 
@@ -20,14 +22,16 @@ const handleLogout = () => {
   }).then(async (result) => {
     if (result.isConfirmed) {
       try {
-        const response =  await axios.post('http://127.0.0.1:8000/api/logout')
+        const response =  await axiosInstance.post(`${Constants.BASE_URL}/logout`)
+        console.log(response);
         localStorage.removeItem('email');
         localStorage.removeItem('name');
         localStorage.removeItem('phone');
         localStorage.removeItem('token');
-        window.location.reload();
+        // window.location.reload();
        } catch (error) {
          console.log(error);
+         
        }
     }
   });
