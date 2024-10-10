@@ -17,11 +17,14 @@ const App = () => {
     }
   }, [])
   
+  console.log(auth);
+  
+  
 
   return (
     <>
       {
-        auth ? <RouterProvider router={ProjectRouter} /> : <RouterProvider router={PublicRouter} />   
+        <RouterProvider router={ ProjectRouter} /> 
       }
     </>
   );

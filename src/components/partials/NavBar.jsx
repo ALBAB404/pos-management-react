@@ -24,8 +24,11 @@ const handleLogout = () => {
     if (result.isConfirmed) {
       try {
         const response =  await axiosInstance.post(`${Constants.BASE_URL}/logout`)
-        GlobalFunction.logout();        
-        window.location.reload();
+        if (response.status === 200) {
+          localStorage.removeItem("token");      
+        }
+        
+        // window.location.reload();
       } catch (error) {
          GlobalFunction.logout();         
        }
