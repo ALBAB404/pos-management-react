@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "@/services/axiosService.js";
 import { useEffect, useState } from "react";
 import {useNavigate} from "react-router-dom";
 import Constants from "@/Constants";
@@ -17,10 +17,11 @@ const Login = () => {
      e.preventDefault();
      try {
       setIsLoading(true);
-      const response =  await axios.post(`${Constants.BASE_URL}/login`, input)
+      const response =  await axiosInstance.post(`${Constants.BASE_URL}/login`, input)
       console.log(response);
       
-      localStorage.email = response.data.name;
+      localStorage.name  = response.data.name;
+      localStorage.email = response.data.email;
       localStorage.phone = response.data.phone;
       localStorage.photo = response.data.photo;
       localStorage.token = response.data.token;

@@ -1,7 +1,8 @@
 import $ from 'jquery';
 import Swal from 'sweetalert2'
 import Constants from "@/Constants";
-import axiosInstance from '../../axiosInterceptors';
+import axiosInstance from "@/services/axiosService.js";
+import GlobalFunction from '../../GlobalFunction/GlobalFunction';
 
 
 const NavBar = () => {
@@ -23,15 +24,10 @@ const handleLogout = () => {
     if (result.isConfirmed) {
       try {
         const response =  await axiosInstance.post(`${Constants.BASE_URL}/logout`)
-        console.log(response);
-        localStorage.removeItem('email');
-        localStorage.removeItem('name');
-        localStorage.removeItem('phone');
-        localStorage.removeItem('token');
-        // window.location.reload();
-       } catch (error) {
-         console.log(error);
-         
+        GlobalFunction.logout();        
+        window.location.reload();
+      } catch (error) {
+         GlobalFunction.logout();         
        }
     }
   });
@@ -52,20 +48,7 @@ const handleLogout = () => {
       </button>
       <form className="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
         <div className="input-group">
-          <input
-            className="form-control"
-            type="text"
-            placeholder="Search for..."
-            aria-label="Search for..."
-            aria-describedby="btnNavbarSearch"
-          />
-          <button
-            className="btn btn-primary"
-            id="btnNavbarSearch"
-            type="button"
-          >
-            <i className="fas fa-search"></i>
-          </button>
+          <p className='text-light mt-3'>{localStorage.name ? localStorage.name : 'No User Name'}</p>
         </div>
       </form>
       <ul className="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
