@@ -1,9 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Master, Dashboard, CategoryAdd, Login } from "@/components";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import ProjectRouter from './components/router/ProjectRouter.jsx';
-import {RouterProvider} from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
-import PublicRouter from './components/router/PublicRouter.jsx';
+
 
 const App = () => {
 
@@ -17,15 +17,28 @@ const App = () => {
     }
   }, [])
   
-  console.log(auth);
-  
-  
 
   return (
     <>
-      {
-        <RouterProvider router={ ProjectRouter} /> 
-      }
+      <BrowserRouter>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* Protected Routes */}
+        {auth ? (
+          <Route path="/" element={<Master />}>
+            {/* These routes are nested under Master layout */}
+            <Route index element={<Dashboard />} />
+            <Route path="category/create" element={<CategoryAdd />} />
+          </Route>
+        ) : (
+          <Route path="*" element={<Navigate to="/login" />} />
+        )}
+      </Routes>
+    </BrowserRouter>
     </>
   );
 };

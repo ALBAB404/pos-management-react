@@ -28,7 +28,7 @@ const handleLogout = () => {
           localStorage.removeItem("token");      
         }
         
-        // window.location.reload();
+        window.location.reload();
       } catch (error) {
          GlobalFunction.logout();         
        }

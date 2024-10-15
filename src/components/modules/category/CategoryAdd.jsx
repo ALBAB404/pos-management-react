@@ -5,7 +5,7 @@ const CategoryAdd = () => {
     <>
       <BreadCrumb title={'Add Category'}/>
       <div className="row">
-asdfasdf
+          category add
       </div>
     </>
   )
