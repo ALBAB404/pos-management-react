@@ -2,13 +2,16 @@ import axiosInstance from "@/services/axiosService.js";
 import { useEffect, useState } from "react";
 import {useNavigate} from "react-router-dom";
 import Constants from "@/Constants";
-
+import { useSelector, useDispatch } from 'react-redux'
+import { setUserData } from "@/stores/Auth.js";
 
 const Login = () => {
   const [input, setInput] = useState({});
   const [errors, setError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleInput = (e) => {
     setInput(prevState => ({...prevState, [e.target.name] : e.target.value }));
   };
@@ -18,15 +21,18 @@ const Login = () => {
      try {
       setIsLoading(true);
       const response =  await axiosInstance.post(`${Constants.BASE_URL}/login`, input)
-      console.log(response);
       
-      localStorage.name  = response.data.name;
-      localStorage.email = response.data.email;
-      localStorage.phone = response.data.phone;
-      localStorage.photo = response.data.photo;
-      localStorage.token = response.data.token;
-      window.location.reload();
+      dispatch(setUserData({
+        name: response.data.name,
+        email: response.data.email,
+        phone: response.data.phone,
+        photo: response.data.photo,
+        token: response.data.token,
+      }));
+      
       setIsLoading(false);
+      // window.location.reload();
+      navigate("/");
     } catch (error) {
       setIsLoading(false);
       if (error.response.status == 422) {
@@ -35,11 +41,12 @@ const Login = () => {
      }
   }
 
-  useEffect(() => {
-    if (localStorage.token) {
-      navigate("/");
-    }
-  }, [])
+  // useEffect(() => {
+  //   const token = useSelector(state => state.auth.value.token); 
+  //   if (token) {
+  //     navigate("/");
+  //   }
+  // }, []);
   
 
   return (

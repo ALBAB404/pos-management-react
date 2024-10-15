@@ -3,9 +3,11 @@ import Swal from 'sweetalert2'
 import Constants from "@/Constants";
 import axiosInstance from "@/services/axiosService.js";
 import GlobalFunction from '../../GlobalFunction/GlobalFunction';
-
+import { useDispatch } from 'react-redux'
+import { clearUserData } from "@/stores/Auth.js";
 
 const NavBar = () => {
+  const dispatch = useDispatch(); 
 
 const handleToggle = () => {
   $('body').toggleClass('sb-sidenav-toggled')
@@ -25,12 +27,11 @@ const handleLogout = () => {
       try {
         const response =  await axiosInstance.post(`${Constants.BASE_URL}/logout`)
         if (response.status === 200) {
-          localStorage.removeItem("token");      
+          dispatch(clearUserData());
+          window.location.reload();
         }
-        
-        window.location.reload();
       } catch (error) {
-         GlobalFunction.logout();         
+        dispatch(clearUserData());         
        }
     }
   });

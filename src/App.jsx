@@ -3,19 +3,12 @@ import { Master, Dashboard, CategoryAdd, Login } from "@/components";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
-
+import { useSelector } from 'react-redux'
 
 const App = () => {
-
-  const [auth, setAuth] = useState(false);
+  const auth = useSelector((state) => state.auth.value)
   
-  useEffect(() => {
-    if (localStorage.token) {
-      setAuth(true);
-    }else{
-      setAuth(false);
-    }
-  }, [])
+  
   
 
   return (
@@ -23,14 +16,11 @@ const App = () => {
       <BrowserRouter>
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
 
         {/* Protected Routes */}
-        {auth ? (
+        {auth.token != null ? (
           <Route path="/" element={<Master />}>
-            {/* These routes are nested under Master layout */}
             <Route index element={<Dashboard />} />
             <Route path="category/create" element={<CategoryAdd />} />
           </Route>
