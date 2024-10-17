@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
+import { useSelector } from 'react-redux'
 
 const SideBar = () => {
+
+  const auth = useSelector((state) => state.auth.value);
+
   return (
     <div id="layoutSidenav_nav">
       <nav
@@ -52,7 +56,7 @@ const SideBar = () => {
         </div>
         <div className="sb-sidenav-footer">
           <div className="small">Logged in as:</div>
-          {localStorage.name ? localStorage.name : 'No User Name'}
+          {auth.name ? auth.name : 'No User Name'}
         </div>
       </nav>
     </div>

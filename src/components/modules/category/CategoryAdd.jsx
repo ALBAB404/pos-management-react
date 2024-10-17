@@ -23,20 +23,29 @@ const CategoryAdd = () => {
   };
 
   const handleCategoryCreate = async () => {
-    const res = await dispatch(fetchCategories(input));
+    try {
+      setIsLoading(true);
+      const res = await dispatch(fetchCategories(input));
     
-    if (res?.payload?.cls == 'success') {
-      Swal.fire({
-        position: "top-end",
-        icon: res.payload.cls,
-        title: res.payload.message,
-        showConfirmButton: false,
-        timer: 1000
-      });
-
-      navigate("/category/list");
-    }else{
-      setError(res.payload.response.data.errors)
+      if (res?.payload?.cls == 'success') {
+        Swal.fire({
+          position: "top-end",
+          icon: res.payload.cls,
+          title: res.payload.message,
+          showConfirmButton: false,
+          timer: 1000
+        });
+        
+        setIsLoading(false);
+        navigate("/category/list");
+      }else{
+        setError(res.payload.response.data.errors)
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }finally{
+      setIsLoading(false);
     }
   };
 
@@ -198,7 +207,13 @@ const CategoryAdd = () => {
                   <div className="row justify-content-center">
                     <div className="col-md-4">
                       <div className="d-grid">
-                        <button className="btn btn-success" onClick={handleCategoryCreate}>Add Category</button>
+                        <button className="btn btn-success" onClick={handleCategoryCreate}
+                          dangerouslySetInnerHTML={{
+                            __html: isLoading
+                              ? '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> Loading....'
+                              : 'Add Category',
+                          }}
+                        />
                       </div>
                     </div>
                   </div>
