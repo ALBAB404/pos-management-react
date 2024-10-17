@@ -1,11 +1,17 @@
 import { BreadCrumb } from "@/components";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchCategories } from "@/stores/Category";
+import Swal from 'sweetalert2'
+
 
 const CategoryAdd = () => {
-  const [input, setInput] = useState({status: 1});
+  const dispatch = useDispatch();
+  const [input, setInput] = useState({});
   const [errors, setError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleInput = (e) => {
     if (e.target.name === 'name') {
@@ -17,9 +23,20 @@ const CategoryAdd = () => {
   };
 
   const handleCategoryCreate = async () => {
-    const res = await      
+    const res = await dispatch(fetchCategories(input));
     console.log(res);
     
+    if (res?.payload?.cls == 'success') {
+      Swal.fire({
+        position: "top-end",
+        icon: res.payload.cls,
+        title: res.payload.message,
+        showConfirmButton: false,
+        timer: 1000
+      });
+
+      navigate("/category/list");
+    }  
   };
 
 
@@ -123,8 +140,8 @@ const CategoryAdd = () => {
                     value={input.status}
                     onChange={handleInput}
                     >
-                      <option value="1">Active</option>
-                      <option value="0">Inactive</option>
+                      <option value={1}>Active</option>
+                      <option value={0}>Inactive</option>
                   </select>
 
                   <p className="text-danger">

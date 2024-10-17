@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import auth from '../stores/Auth.js'
+import category from '../stores/Category.js'
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 
@@ -16,6 +17,7 @@ const persistedAuthReducer = persistReducer(authPersistConfig, auth);
 const store = configureStore({
   reducer: {
     auth: persistedAuthReducer, // Use the persisted auth reducer
+    category: category,
   },
 });
 
