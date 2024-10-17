@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Master, Dashboard, CategoryAdd, Login } from "@/components";
+import { Master, Dashboard, CategoryAdd, CategoryList, Login } from "@/components";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
@@ -22,6 +22,7 @@ const App = () => {
         {auth.token != null ? (
           <Route path="/" element={<Master />}>
             <Route index element={<Dashboard />} />
+            <Route path="category/list" element={<CategoryList />} />
             <Route path="category/create" element={<CategoryAdd />} />
           </Route>
         ) : (

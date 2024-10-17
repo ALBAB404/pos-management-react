@@ -7,8 +7,8 @@ const BreadCrumb = ({ title }) => {
         <title>{title}</title> {/* Dynamically setting the title */}
       </Helmet>
       <ol className="breadcrumb my-4">
-        <li className="breadcrumb-item active text-danger">{title}</li> {/* Using {title} correctly */}
         <li className="breadcrumb-item">Dashboard</li>
+        <li className="breadcrumb-item active text-danger">{title}</li>
       </ol>
     </>
   );

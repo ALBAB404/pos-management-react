@@ -1,7 +1,9 @@
-
+import {BreadCrumb} from "@/components"
 const CategoryList = () => {
   return (
-    <div>ListCategory</div>
+    <>
+      <BreadCrumb title={'Add Category'}/>
+    </>
   )
 }
 
