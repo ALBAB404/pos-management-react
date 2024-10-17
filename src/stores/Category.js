@@ -6,14 +6,14 @@ export const fetchCategories = createAsyncThunk('fetchCategories', async (input)
 
   try {
       const response =  await axiosInstance.post(`${Constants.BASE_URL}/categories`, input)
-      console.log(response);
-      
+    
       if (response?.status == 200) {
         return response.data
+      }else{
+        return response;
       }
     } catch (error) {
       console.log(error);
-      
     }
   
   

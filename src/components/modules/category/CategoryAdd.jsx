@@ -24,7 +24,6 @@ const CategoryAdd = () => {
 
   const handleCategoryCreate = async () => {
     const res = await dispatch(fetchCategories(input));
-    console.log(res);
     
     if (res?.payload?.cls == 'success') {
       Swal.fire({
@@ -36,7 +35,9 @@ const CategoryAdd = () => {
       });
 
       navigate("/category/list");
-    }  
+    }else{
+      setError(res.payload.response.data.errors)
+    }
   };
 
 

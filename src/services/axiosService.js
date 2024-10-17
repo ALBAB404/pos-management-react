@@ -26,13 +26,8 @@ axiosInstance.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      GlobalFunction.logout();
-    }else if (error.response.status === 500){
-      console.log('500');
-      
-    }
+  (error) => {    
+    return error;      
   }
 );
 
