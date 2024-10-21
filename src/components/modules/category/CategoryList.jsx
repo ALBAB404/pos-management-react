@@ -5,27 +5,33 @@ import axiosInstance from "@/services/axiosService.js";
 import { BreadCrumb, CardHeader, CategoryPhotoModal } from "@/components";
 
 const CategoryList = () => {
-  const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
-  const [totalItemsCount, setTotalItemsCount] = useState(1);
-  const [startForm, setStartForm] = useState(1);
-  const [activePage, setActivePage] = useState(1);
   
-  const [modalShow, setModalShow] = useState(false);
-  const [categories, setCategories] = useState([]);
+// All Searching Variables start
+  const [input, setInput] = useState({
+    order_by : 'serial',
+    per_page : 10,
+    direction: 'asc',
+    search   : '',
+  });
+// All Searching Variables end
+
+//paginations data
+  const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
+  const [totalItemsCount, setTotalItemsCount]     = useState(1);
+  const [startForm, setStartForm]                 = useState(1);
+  const [activePage, setActivePage]               = useState(1);
+//paginations data
+
+//Modla photo showign start
+  const [modalShow, setModalShow]   = useState(false);
   const [modalPhoto, setModalPhoto] = useState('');
+//Modla photo showign end
+  const [categories, setCategories] = useState([]);
 
-  const handlePhotoModal = (photo) => {
-    setModalPhoto(photo);
-    setModalShow(true)
-  }
-
-  const getCategoryList = async (pageNumber) => {
+ // Category All data get by apis start 
+  const getCategoryList = async (pageNumber = 1) => {
     try {
-      const response = await axiosInstance.get(
-        `${Constants.BASE_URL}/categories?page=${pageNumber}`
-      );
-      console.log(response);
-      
+      const response = await axiosInstance.get(`${Constants.BASE_URL}/categories?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&direction=${input.direction}&per_page=${input.per_page}`);      
       if (response?.status == 200) {
         setCategories(response.data.data);
         setItemsCountPerPage(response.data.meta.per_page);
@@ -39,6 +45,20 @@ const CategoryList = () => {
       console.log(error);
     }
   };
+// Category All data get by apis end 
+
+//Modla photo showign start
+    const handlePhotoModal = (photo) => {
+      setModalPhoto(photo);
+      setModalShow(true)
+    }
+//Modla photo showign end
+
+// searching part start
+  const handleSearch = (e) => {
+    setInput((prevState) => ({...prevState,[e.target.name]: e.target.value}));
+  };
+// searching part end
 
   useEffect(() => {
     getCategoryList();
@@ -57,6 +77,79 @@ const CategoryList = () => {
               buttonIcon="fa-solid fa-bars me-2 text-light"
             />
             <div className="card-body">
+
+            <div className="search-area mb-4">
+               <div className="row">
+                  <div className="col-md-3">
+                    <label className="w-100">
+                      <span>Search</span>
+                      <input
+                          className="form-control form-control-sm my-2"
+                          type={'search'}
+                          name={'search'}
+                          value={input.search}
+                          onChange={handleSearch}
+                          placeholder="Searching ...."
+                        />
+                    </label>
+                  </div>
+                  <div className="col-md-3">
+                    <label className="w-100">
+                      <span>Order By</span>
+                      <select
+                          className="form-select form-select-sm my-2"
+                          name={'order_by'}
+                          value={input.order_by}
+                          onChange={handleSearch}
+                        >
+                          <option value={"name"}>Name</option>
+                          <option value={"slug"}>Created At</option>
+                          <option value={"created_at"}>Updated At</option>
+                          <option value={"status"}>Status</option>
+                          <option value={"serial"}>Serial</option>
+                        </select>
+
+                    </label>
+                  </div>
+                  <div className="col-md-2">
+                    <label className="w-100">
+                      <span>Order Direction</span>
+                      <select
+                          className="form-select form-select-sm my-2"
+                          name={'direction'}
+                          value={input.direction}
+                          onChange={handleSearch}
+                        >
+                          <option value={"asc"}>Asc</option>
+                          <option value={"desc"}>Desc</option>
+                        </select>
+                    </label>
+                  </div>
+                  <div className="col-md-2">
+                    <label className="w-100">
+                      <span>Order By Per Page</span>
+                      <select
+                          className="form-select form-select-sm my-2"
+                          name={'direction'}
+                          value={input.per_page}
+                          onChange={handleSearch}
+                        >
+                          <option value={10}>10</option>
+                          <option value={25}>25</option>
+                          <option value={50}>50</option>
+                          <option value={100}>100</option>
+                        </select>
+                    </label>
+                  </div>
+                  <div className="col-md-2">
+                    <div className="d-grid mt-4">
+                      <button className="btn btn-sm btn-success my-2" onClick={()=> getCategoryList(1)}><i className="fa-solid fa-magnifying-glass"></i> Search</button>
+                    </div>
+                  </div>
+               </div>
+            </div>
+
+
               <div className="table-responsive">
                 <table className="my-table table table-striped table-hover table-bordered">
                   <thead>
