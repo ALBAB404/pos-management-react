@@ -1,6 +1,5 @@
 import axios from "axios";
 import Constants from "@/Constants";
-import GlobalFunction from "../GlobalFunction/GlobalFunction";
 import store from "@/app/store.js";
 
 
@@ -11,9 +10,8 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-  function (config) {    
+  function (config) {        
     const token = store.getState().auth.value.token;
-    
     config.headers["Authorization"] = token ? `Bearer ${token}` : "";
     return config;
   },

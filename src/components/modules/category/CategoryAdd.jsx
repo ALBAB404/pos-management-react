@@ -1,9 +1,9 @@
-import { BreadCrumb } from "@/components";
-import { useEffect, useState } from "react";
+import { BreadCrumb, CardHeader } from "@/components";
+import {  useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux'
+import {  useDispatch } from 'react-redux'
 import { fetchCategories } from "@/stores/Category";
-import Swal from 'sweetalert2'
+import SweetAlert from "../../../CommonFunction/SweetAlert";
 
 
 const CategoryAdd = () => {
@@ -26,19 +26,12 @@ const CategoryAdd = () => {
     try {
       setIsLoading(true);
       const res = await dispatch(fetchCategories(input));
-    
-      if (res?.payload?.cls == 'success') {
-        Swal.fire({
-          position: "top-end",
-          icon: res.payload.cls,
-          title: res.payload.message,
-          showConfirmButton: false,
-          timer: 1000
-        });
-        
+      if (res?.payload?.status == 'success') {
+        SweetAlert.successAlertMsm(res.payload.status, res.payload.message);        
         setIsLoading(false);
         navigate("/category/list");
       }else{
+        SweetAlert.successAlertMsm('error', 'Category create failed');   
         setError(res.payload.response.data.errors)
       }
     } catch (error) {
@@ -68,16 +61,7 @@ const CategoryAdd = () => {
       <div className="row">
         <div className="col-md-12">
           <div className="card">
-            <div className="card-header">
-              <div className="d-flex justify-content-between">
-                <h3>Add Category</h3>
-                <button className="btn btn-info">
-                  <Link className="text-light" to="/category/list">
-                    List
-                  </Link>
-                </button>
-              </div>
-            </div>
+            <CardHeader title='Add Category' location='/category/list' buttonText='List' buttonIcon='fa-solid fa-plus me-2 text-light'/>
             <div className="card-body">
               <div className="row">
                 <div className="col-md-6">

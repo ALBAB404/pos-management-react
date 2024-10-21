@@ -1,3 +1,10 @@
 a{
   text-decoration: none;
 }
+
+.my-table{
+  font-size: 14px;
+}
+.my-table th, .my-table td{
+  vertical-align: middle;
+}

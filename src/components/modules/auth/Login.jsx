@@ -2,7 +2,7 @@ import axiosInstance from "@/services/axiosService.js";
 import { useState } from "react";
 import {useNavigate} from "react-router-dom";
 import Constants from "@/Constants";
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { setUserData } from "@/stores/Auth.js";
 
 const Login = () => {
@@ -20,19 +20,19 @@ const Login = () => {
      e.preventDefault();
      try {
       setIsLoading(true);
-      const response =  await axiosInstance.post(`${Constants.BASE_URL}/login`, input)
-      
-      dispatch(setUserData({
-        name: response.data.name,
-        email: response.data.email,
-        phone: response.data.phone,
-        photo: response.data.photo,
-        token: response.data.token,
-      }));
-      
-      setIsLoading(false);
-      // window.location.reload();
-      navigate("/");
+      const response =  await axiosInstance.post(`${Constants.BASE_URL}/login`, input)      
+        if (response.data.status == 'success') {
+          dispatch(setUserData({
+            name: response.data.result.name,
+            email: response.data.result.email,
+            phone: response.data.result.phone,
+            photo: response.data.result.photo,
+            token: response.data.result.token,
+          }));
+          
+          setIsLoading(false);
+          navigate("/");
+        }
     } catch (error) {
       setIsLoading(false);
       if (error.response.status == 422) {
@@ -40,13 +40,6 @@ const Login = () => {
       }
      }
   }
-
-  // useEffect(() => {
-  //   const token = useSelector(state => state.auth.value.token); 
-  //   if (token) {
-  //     navigate("/");
-  //   }
-  // }, []);
   
 
   return (
