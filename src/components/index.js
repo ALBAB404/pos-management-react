@@ -15,3 +15,6 @@ export { default as BreadCrumb } from "@/components/partials/BreadCrumb.jsx";
 
 
 export { default as CardHeader } from "@/components/partials/miniComponent/CardHeader.jsx";
+
+
+export { default as CategoryPhotoModal } from "@/components/partials/modals/CategoryPhotoModal.jsx";

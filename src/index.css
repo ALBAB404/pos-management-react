@@ -8,3 +8,7 @@ a{
 .my-table th, .my-table td{
   vertical-align: middle;
 }
+.table-img{
+  width: 75px;
+  cursor: pointer;
+}
