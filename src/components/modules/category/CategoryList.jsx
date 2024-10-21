@@ -1,11 +1,16 @@
-import { BreadCrumb, CardHeader, CategoryPhotoModal } from "@/components";
-import { useEffect, useState } from "react";
-import axiosInstance from "@/services/axiosService.js";
 import Constants from "@/Constants";
+import { useEffect, useState } from "react";
+import ReactPaginate from 'react-js-pagination';
+import axiosInstance from "@/services/axiosService.js";
+import { BreadCrumb, CardHeader, CategoryPhotoModal } from "@/components";
 
 const CategoryList = () => {
+  const [itemsCountPerPage, setItemsCountPerPage] = useState(0);
+  const [totalItemsCount, setTotalItemsCount] = useState(1);
+  const [startForm, setStartForm] = useState(1);
+  const [activePage, setActivePage] = useState(1);
+  
   const [modalShow, setModalShow] = useState(false);
-
   const [categories, setCategories] = useState([]);
   const [modalPhoto, setModalPhoto] = useState('');
 
@@ -14,13 +19,19 @@ const CategoryList = () => {
     setModalShow(true)
   }
 
-  const getCategoryList = async () => {
+  const getCategoryList = async (pageNumber) => {
     try {
       const response = await axiosInstance.get(
-        `${Constants.BASE_URL}/categories`
+        `${Constants.BASE_URL}/categories?page=${pageNumber}`
       );
+      console.log(response);
+      
       if (response?.status == 200) {
         setCategories(response.data.data);
+        setItemsCountPerPage(response.data.meta.per_page);
+        setStartForm(response.data.meta.from);
+        setTotalItemsCount(response.data.meta.total);
+        setActivePage(response.data.meta.current_page);
       } else {
         return response;
       }
@@ -38,7 +49,7 @@ const CategoryList = () => {
       <BreadCrumb title={"Category List"} />
       <div className="row">
         <div className="col-md-12">
-          <div className="card">
+          <div className="card mb-4">
             <CardHeader
               title="Category List"
               location="/category/create"
@@ -63,7 +74,7 @@ const CategoryList = () => {
                     {categories && categories.length > 0 ? (
                       categories.map((category, index) => (
                         <tr key={index}>
-                          <td>{++index}</td>
+                          <td>{startForm + index}</td>
                           <td>
                             <p className={"text-success"}>{category.name}</p>
                             <p className={"text-info"}>{category.slug}</p>
@@ -115,6 +126,23 @@ const CategoryList = () => {
                   onHide={() => setModalShow(false)}
                 />
               </div>
+            </div>
+            <div className="cart-footer">
+              <nav className="pagination-sm ms-3">
+                <ReactPaginate
+                    activePage={activePage}
+                    itemsCountPerPage={itemsCountPerPage}
+                    totalItemsCount={totalItemsCount}
+                    onChange={getCategoryList}
+                    pageRangeDisplayed={5}
+                    nextPageText={'next'}
+                    firstPageText={'first'}
+                    prevPageText={'previous'}
+                    lastPageText={'last'}
+                    itemClass={'page-item'}
+                    linkClass={'page-link'}
+                />
+              </nav>
             </div>
           </div>
         </div>
