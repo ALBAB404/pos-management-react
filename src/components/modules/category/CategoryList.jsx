@@ -2,9 +2,10 @@ import Constants from "@/Constants";
 import { useEffect, useState } from "react";
 import ReactPaginate from 'react-js-pagination';
 import axiosInstance from "@/services/axiosService.js";
-import { BreadCrumb, CardHeader, CategoryPhotoModal, CategoryDetailsModal } from "@/components";
+import { BreadCrumb, CardHeader, CategoryPhotoModal, CategoryDetailsModal, TableSkeleton } from "@/components";
 import { Link } from "react-router-dom";
 import Swal from 'sweetalert2'
+
 
 const CategoryList = () => {
   
@@ -247,9 +248,7 @@ const CategoryList = () => {
                         </tr>
                       ))
                     ) : (
-                      <tr>
-                        <td colSpan="7">No categories found.</td>
-                      </tr>
+                      <TableSkeleton trForItem={9} tdForItem={7} />
                     )}
                   </tbody>
                 </table>

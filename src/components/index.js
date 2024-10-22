@@ -19,3 +19,6 @@ export { default as CardHeader } from "@/components/partials/miniComponent/CardH
 
 export { default as CategoryPhotoModal } from "@/components/partials/modals/CategoryPhotoModal.jsx";
 export { default as CategoryDetailsModal } from "@/components/partials/modals/CategoryDetailsModal.jsx";
+
+
+export { default as TableSkeleton } from "@/components/partials/skeleton/TableSkeleton.jsx";
