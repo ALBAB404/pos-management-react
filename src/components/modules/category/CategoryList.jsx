@@ -5,6 +5,7 @@ import axiosInstance from "@/services/axiosService.js";
 import { BreadCrumb, CardHeader, CategoryPhotoModal, CategoryDetailsModal, TableSkeleton } from "@/components";
 import { Link } from "react-router-dom";
 import Swal from 'sweetalert2'
+import SweetAlert from "../../../CommonFunction/SweetAlert";
 
 
 const CategoryList = () => {
@@ -33,10 +34,12 @@ const CategoryList = () => {
   const [category, setCategory] = useState([]);
 //Modla category showing end
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
 
  // Category All data get by apis start 
   const getCategoryList = async (pageNumber = 1) => {
     try {
+      setLoading(true);
       const response = await axiosInstance.get(`${Constants.BASE_URL}/categories?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&direction=${input.direction}&per_page=${input.per_page}`);      
       if (response?.status == 200) {
         setCategories(response.data.data);
@@ -44,10 +47,13 @@ const CategoryList = () => {
         setStartForm(response.data.meta.from);
         setTotalItemsCount(response.data.meta.total);
         setActivePage(response.data.meta.current_page);
+        setLoading(false);
       } else {
+        setLoading(false);
         return response;
       }
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -82,21 +88,9 @@ const CategoryList = () => {
           const response = await axiosInstance.delete(`${Constants.BASE_URL}/categories/${categoryId}`);      
           if (response.status == 200) {
             getCategoryList();
-            Swal.fire({
-              position: "top-end",
-              icon: response.data.status,
-              title: response.data.message,
-              showConfirmButton: false,
-              timer: 1000
-            });
+            SweetAlert.successAlertMsm(response.data.status, response.data.message);
           }else{
-            Swal.fire({
-              position: "top-end",
-              icon: 'error',
-              title: 'category not deleted',
-              showConfirmButton: false,
-              timer: 1000
-            });
+            SweetAlert.successAlertMsm('error', 'Category Not deleted');
           }
         }
       });
@@ -248,7 +242,12 @@ const CategoryList = () => {
                         </tr>
                       ))
                     ) : (
-                      <TableSkeleton trForItem={9} tdForItem={7} />
+                      loading ? <TableSkeleton trForItem={9} tdForItem={7} /> :
+                      <tr>
+                        <td colSpan={7} className="text-center">
+                          <p>No data found</p>
+                        </td>
+                      </tr>
                     )}
                   </tbody>
                 </table>
