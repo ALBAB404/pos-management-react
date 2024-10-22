@@ -66,7 +66,7 @@ const CategoryList = () => {
     }
 //Modla category showing end
 
-//Modlacategory showing start
+//category delete start
     const handleCategoryDelete = async (categoryId) => {
       Swal.fire({
         title: "Are you sure?",
@@ -78,19 +78,29 @@ const CategoryList = () => {
         confirmButtonText: "Yes, Delete It !"
       }).then(async (result) => {
         if (result.isConfirmed) {
-          const response = await axiosInstance.get(`${Constants.BASE_URL}/categories/${categoryId}`);      
-          console.log(response);
-          // Swal.fire({
-          //   position: "top-end",
-          //   icon: status,
-          //   title: message,
-          //   showConfirmButton: false,
-          //   timer: 1000
-          // });
+          const response = await axiosInstance.delete(`${Constants.BASE_URL}/categories/${categoryId}`);      
+          if (response.status == 200) {
+            getCategoryList();
+            Swal.fire({
+              position: "top-end",
+              icon: response.data.status,
+              title: response.data.message,
+              showConfirmButton: false,
+              timer: 1000
+            });
+          }else{
+            Swal.fire({
+              position: "top-end",
+              icon: 'error',
+              title: 'category not deleted',
+              showConfirmButton: false,
+              timer: 1000
+            });
+          }
         }
       });
     }
-//Modla category showing end
+//category delete end
 
 // searching part start
   const handleSearch = (e) => {
