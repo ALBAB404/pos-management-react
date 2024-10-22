@@ -2,7 +2,9 @@ import Constants from "@/Constants";
 import { useEffect, useState } from "react";
 import ReactPaginate from 'react-js-pagination';
 import axiosInstance from "@/services/axiosService.js";
-import { BreadCrumb, CardHeader, CategoryPhotoModal } from "@/components";
+import { BreadCrumb, CardHeader, CategoryPhotoModal, CategoryDetailsModal } from "@/components";
+import { Link } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 const CategoryList = () => {
   
@@ -26,6 +28,9 @@ const CategoryList = () => {
   const [modalShow, setModalShow]   = useState(false);
   const [modalPhoto, setModalPhoto] = useState('');
 //Modla photo showign end
+//Modla category showing start
+  const [category, setCategory] = useState([]);
+//Modla category showing end
   const [categories, setCategories] = useState([]);
 
  // Category All data get by apis start 
@@ -53,6 +58,39 @@ const CategoryList = () => {
       setModalShow(true)
     }
 //Modla photo showign end
+
+//Modlacategory showing start
+    const handleCategoryShowing = (category) => {
+      setCategory(category);
+      setModalShow(true)
+    }
+//Modla category showing end
+
+//Modlacategory showing start
+    const handleCategoryDelete = async (categoryId) => {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Category Will Be Deleted!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Delete It !"
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const response = await axiosInstance.get(`${Constants.BASE_URL}/categories/${categoryId}`);      
+          console.log(response);
+          // Swal.fire({
+          //   position: "top-end",
+          //   icon: status,
+          //   title: message,
+          //   showConfirmButton: false,
+          //   timer: 1000
+          // });
+        }
+      });
+    }
+//Modla category showing end
 
 // searching part start
   const handleSearch = (e) => {
@@ -148,8 +186,6 @@ const CategoryList = () => {
                   </div>
                </div>
             </div>
-
-
               <div className="table-responsive">
                 <table className="my-table table table-striped table-hover table-bordered">
                   <thead>
@@ -194,12 +230,9 @@ const CategoryList = () => {
                             </p>
                           </td>
                           <td>
-                            <button className="btn btn-sm btn-primary">
-                              Edit
-                            </button>
-                            <button className="btn btn-sm btn-danger">
-                              Delete
-                            </button>
+                            <button className="btn btn-sm btn-info mx-1" onClick={()=>{handleCategoryShowing(category)}}><i className="fa-solid fa-eye"></i></button>
+                            <Link to='/'><button className="btn btn-sm btn-warning mx-1"><i className="fa-solid fa-edit"></i></button></Link>
+                            <button className="btn btn-sm btn-danger mx-1" onClick={()=>{handleCategoryDelete(category.id)}}><i className="fa-solid fa-trash"></i></button>
                           </td>
                         </tr>
                       ))
@@ -214,6 +247,14 @@ const CategoryList = () => {
                 <CategoryPhotoModal
                   title={'Category Photo'}
                   photo={modalPhoto}
+                  size={'lg'}
+                  show={modalShow}
+                  onHide={() => setModalShow(false)}
+                />
+
+                <CategoryDetailsModal
+                  title={'Category Details Show'}
+                  category={category}
                   size={'lg'}
                   show={modalShow}
                   onHide={() => setModalShow(false)}
