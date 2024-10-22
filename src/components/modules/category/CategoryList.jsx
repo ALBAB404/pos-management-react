@@ -27,8 +27,9 @@ const CategoryList = () => {
 //paginations data
 
 //Modla photo showign start
-  const [modalShow, setModalShow]   = useState(false);
-  const [modalPhoto, setModalPhoto] = useState('');
+  const [modalShow, setModalShow]           = useState(false);
+  const [modalPhotoShow, setModalPhotoShow] = useState(false);
+  const [modalPhoto, setModalPhoto]         = useState('');
 //Modla photo showign end
 //Modla category showing start
   const [category, setCategory] = useState([]);
@@ -62,7 +63,7 @@ const CategoryList = () => {
 //Modla photo showign start
     const handlePhotoModal = (photo) => {
       setModalPhoto(photo);
-      setModalShow(true)
+      setModalPhotoShow(true)
     }
 //Modla photo showign end
 
@@ -236,7 +237,7 @@ const CategoryList = () => {
                           </td>
                           <td>
                             <button className="btn btn-sm btn-info mx-1" onClick={()=>{handleCategoryShowing(category)}}><i className="fa-solid fa-eye"></i></button>
-                            <Link to='/'><button className="btn btn-sm btn-warning mx-1"><i className="fa-solid fa-edit"></i></button></Link>
+                            <Link to={`/category/edit/${category.id}`}><button className="btn btn-sm btn-warning mx-1"><i className="fa-solid fa-edit"></i></button></Link>
                             <button className="btn btn-sm btn-danger mx-1" onClick={()=>{handleCategoryDelete(category.id)}}><i className="fa-solid fa-trash"></i></button>
                           </td>
                         </tr>
@@ -256,8 +257,8 @@ const CategoryList = () => {
                   title={'Category Photo'}
                   photo={modalPhoto}
                   size={'lg'}
-                  show={modalShow}
-                  onHide={() => setModalShow(false)}
+                  show={modalPhotoShow}
+                  onHide={() => setModalPhotoShow(false)}
                 />
 
                 <CategoryDetailsModal

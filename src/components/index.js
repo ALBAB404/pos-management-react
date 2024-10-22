@@ -6,6 +6,7 @@ export { default as Dashboard } from "@/components/modules/Dashboard.jsx";
 export { default as Login } from "@/components/modules/auth/Login.jsx";
 export { default as CategoryAdd } from "@/components/modules/category/CategoryAdd.jsx";
 export { default as CategoryList } from "@/components/modules/category/CategoryList.jsx";
+export { default as CategoryEdit } from "@/components/modules/category/CategoryEdit.jsx";
 
 
 export { default as Footer } from "@/components/partials/Footer.jsx";

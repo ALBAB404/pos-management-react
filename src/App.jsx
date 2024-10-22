@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Master, Dashboard, CategoryAdd, CategoryList, Login } from "@/components";
+import { Master, Dashboard, CategoryAdd, CategoryList, CategoryEdit, Login } from "@/components";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
@@ -24,6 +24,7 @@ const App = () => {
             <Route index element={<Dashboard />} />
             <Route path="category/list" element={<CategoryList />} />
             <Route path="category/create" element={<CategoryAdd />} />
+            <Route path="category/edit/:id?" element={<CategoryEdit />} />
           </Route>
         ) : (
           <Route path="*" element={<Navigate to="/login" />} />
