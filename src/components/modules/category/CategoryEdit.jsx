@@ -1,16 +1,12 @@
 import { BreadCrumb, CardHeader } from "@/components";
 import {  useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import {  useDispatch } from 'react-redux'
-import { fetchCategories } from "@/stores/Category";
+import { useNavigate, useParams } from "react-router-dom";
 import SweetAlert from "../../../CommonFunction/SweetAlert";
 import axiosInstance from "@/services/axiosService.js";
 import Constants from "@/Constants";
 
 const CategoryEdit = () => {
   const params = useParams();
-  const [category, setCategory] = useState([])
-  const dispatch = useDispatch();
   const [input, setInput] = useState({});
   const [errors, setError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -45,15 +41,13 @@ const CategoryEdit = () => {
     try {
       setIsLoading(true);
       const res = await axiosInstance.put(`${Constants.BASE_URL}/categories/${params.id}`, input)
-      console.log(res);
-      
-      if (res?.payload?.status == 'success') {
-        SweetAlert.successAlertMsm(res.payload.status, res.payload.message);        
+      if (res?.data?.status == 'success') {
+        SweetAlert.successAlertMsm(res.data.status, res.data.message);        
         setIsLoading(false);
-        // navigate("/category/list");
+        navigate("/category/list");
       }else{
         SweetAlert.successAlertMsm('error', 'Category create failed');   
-        setError(res.payload.response.data.errors)
+        setError(res.data.response.data.errors)
       }
     } catch (error) {
       setIsLoading(false);

@@ -1,6 +1,6 @@
 import { BreadCrumb, CardHeader } from "@/components";
 import {  useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {  useDispatch } from 'react-redux'
 import { fetchCategories } from "@/stores/Category";
 import SweetAlert from "../../../CommonFunction/SweetAlert";
@@ -41,7 +41,6 @@ const CategoryAdd = () => {
       setIsLoading(false);
     }
   };
-
 
   const handlePhotoChange = (e) => {
     let file = e.target.files[0];
