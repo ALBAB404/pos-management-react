@@ -52,6 +52,37 @@ const SideBar = () => {
                 </Link>
               </nav>
             </div>
+            <a
+              className="nav-link collapsed"
+              href="#"
+              data-bs-toggle="collapse"
+              data-bs-target="#sub_category"
+              aria-expanded="false"
+              aria-controls="collapseLayouts"
+            >
+              <div className="sb-nav-link-icon">
+                <i className="fas fa-columns"></i>
+              </div>
+              Sub Category
+              <div className="sb-sidenav-collapse-arrow">
+                <i className="fas fa-angle-down"></i>
+              </div>
+            </a>
+            <div
+              className="collapse"
+              id="sub_category"
+              aria-labelledby="headingOne"
+              data-bs-parent="#sidenavAccordion"
+            >
+              <nav className="sb-sidenav-menu-nested nav">
+                <Link className="nav-link" to="/category/list">
+                Sub Category List
+                </Link>
+                <Link className="nav-link" to="/category/create">
+                Add Sub Category
+                </Link>
+              </nav>
+            </div>
           </div>
         </div>
         <div className="sb-sidenav-footer">
