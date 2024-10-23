@@ -4,6 +4,9 @@ import {
   CategoryAdd,
   CategoryList,
   CategoryEdit,
+  SubCategoryList,
+  SubCategoryAdd,
+  SubCategoryEdit,
   Login,
 } from "@/components";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
@@ -25,6 +28,10 @@ const AppRoutes = () => {
             <Route path="category/list" element={<CategoryList />} />
             <Route path="category/create" element={<CategoryAdd />} />
             <Route path="category/edit/:id?" element={<CategoryEdit />} />
+
+            <Route path="sub-category/list" element={<SubCategoryList />} />
+            <Route path="sub-category/create" element={<SubCategoryAdd />} />
+            <Route path="sub-category/edit/:id?" element={<SubCategoryEdit />} />
           </Route>
         ) : (
           <Route path="*" element={<Navigate to="/login" />} />
