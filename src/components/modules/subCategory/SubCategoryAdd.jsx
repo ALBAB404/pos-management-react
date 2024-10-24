@@ -25,9 +25,9 @@ const SubCategoryAdd = () => {
   const getCategories = async () => {
     try {
       setIsLoading(true);
-      const res = await axiosInstance.get(`${Constants.BASE_URL}/categories`, input)
+      const res = await axiosInstance.get(`${Constants.BASE_URL}/get-category-list`)
       if (res?.status == 200) {
-        setCategory(res.data.data)
+        setCategory(res.data.result)
       }else{
         setError(res.data.response.data.errors)
       }
@@ -49,7 +49,7 @@ const SubCategoryAdd = () => {
         navigate("/sub-category/list");
       }else{
         SweetAlert.successAlertMsm('error', 'Sub Category create failed');   
-        setError(res.data.response.data.errors)
+        setError(res.response.data.errors)
       }
     } catch (error) {
       setIsLoading(false);
@@ -90,9 +90,9 @@ const SubCategoryAdd = () => {
                     Categories
                   </label>
 
-                  <select className={ errors.category != undefined ? "form-select mt-2 is-invalid" : "form-select mt-2" }
-                    name="category"
-                    value={input.category}
+                  <select className={ errors.category_id != undefined ? "form-select mt-2 is-invalid" : "form-select mt-2" }
+                    name={'category_id'}
+                    value={input.category_id}
                     onChange={handleInput}
                     >
                     {Array.isArray(category) && category.length > 0 ? (
@@ -107,7 +107,7 @@ const SubCategoryAdd = () => {
                   </select>
 
                   <p className="text-danger">
-                    {errors?.status != undefined ? errors?.status[0] : null}
+                    {errors?.category_id != undefined ? errors?.category_id[0] : null}
                   </p>
                 </div>
                 <div className="col-md-6">

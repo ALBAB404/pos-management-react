@@ -38,10 +38,10 @@ const CategoryList = () => {
   const [loading, setLoading] = useState(false);
 
  // Category All data get by apis start 
-  const getCategoryList = async (pageNumber = 1) => {
+  const getSubCategoryList = async (pageNumber = 1) => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`${Constants.BASE_URL}/categories?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&direction=${input.direction}&per_page=${input.per_page}`);      
+      const response = await axiosInstance.get(`${Constants.BASE_URL}/sub-categories?page=${pageNumber}&search=${input.search}&order_by=${input.order_by}&direction=${input.direction}&per_page=${input.per_page}`);      
       if (response?.status == 200) {
         setCategories(response.data.data);
         setItemsCountPerPage(response.data.meta.per_page);
@@ -86,9 +86,9 @@ const CategoryList = () => {
         confirmButtonText: "Yes, Delete It !"
       }).then(async (result) => {
         if (result.isConfirmed) {
-          const response = await axiosInstance.delete(`${Constants.BASE_URL}/categories/${categoryId}`);      
+          const response = await axiosInstance.delete(`${Constants.BASE_URL}/sub-categories/${categoryId}`);      
           if (response.status == 200) {
-            getCategoryList();
+            getSubCategoryList();
             SweetAlert.successAlertMsm(response.data.status, response.data.message);
           }else{
             SweetAlert.successAlertMsm('error', 'Category Not deleted');
@@ -105,7 +105,7 @@ const CategoryList = () => {
 // searching part end
 
   useEffect(() => {
-    getCategoryList();
+    getSubCategoryList();
   }, []);
 
   return (
@@ -187,7 +187,7 @@ const CategoryList = () => {
                   </div>
                   <div className="col-md-2">
                     <div className="d-grid mt-4">
-                      <button className="btn btn-sm btn-success my-2" onClick={()=> getCategoryList(1)}><i className="fa-solid fa-magnifying-glass"></i> Search</button>
+                      <button className="btn btn-sm btn-success my-2" onClick={()=> getSubCategoryList(1)}><i className="fa-solid fa-magnifying-glass"></i> Search</button>
                     </div>
                   </div>
                </div>
@@ -276,7 +276,7 @@ const CategoryList = () => {
                     activePage={activePage}
                     itemsCountPerPage={itemsCountPerPage}
                     totalItemsCount={totalItemsCount}
-                    onChange={getCategoryList}
+                    onChange={getSubCategoryList}
                     pageRangeDisplayed={5}
                     nextPageText={'next'}
                     firstPageText={'first'}

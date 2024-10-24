@@ -30,6 +30,13 @@ const CategoryDetailsModal = (props) => {
                   <td>slug</td>
                   <td>{props.category.slug}</td>
                 </tr>
+                {
+                  props.category.category_name ?  
+                  <tr>
+                    <td>Category Name</td>
+                    <td>{props.category.category_name}</td>
+                  </tr> : null
+                }
                 <tr>
                   <td>serial</td>
                   <td>{props.category.serial}</td>
