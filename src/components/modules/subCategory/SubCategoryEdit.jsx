@@ -8,25 +8,45 @@ import Constants from "@/Constants";
 const CategoryEdit = () => {
   const params = useParams();
   const [input, setInput] = useState({});
+  const [category, setCategory] = useState({});
   const [errors, setError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
 
  // Category All data get by apis start 
-  const getCategory = async () => {
-      try {
-        const response = await axiosInstance.get(`${Constants.BASE_URL}/categories/${params.id}}`);      
-        if (response?.status == 200) {
-          setInput(response.data.data)
-        } else {
-          return response;
-        }
-      } catch (error) {
-        console.log(error);
+ const getCategories = async () => {
+    try {
+      setIsLoading(true);
+      const res = await axiosInstance.get(`${Constants.BASE_URL}/get-category-list`)
+      if (res?.status == 200) {
+        setCategory(res.data.result)
+      }else{
+        setError(res.data.response.data.errors)
       }
-  };
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }finally{
+      setIsLoading(false);
+    }
+ };
 // Category All data get by apis end 
+
+ // Sub Category All data get by apis start 
+ const getSubCategory = async () => {
+  try {
+    const response = await axiosInstance.get(`${Constants.BASE_URL}/sub-categories/${params.id}}`);      
+    if (response?.status == 200) {
+      setInput(response.data.data)
+    } else {
+      return response;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+// Sub Category All data get by apis end 
 
   const handleInput = (e) => {
     if (e.target.name === 'name') {
@@ -37,17 +57,18 @@ const CategoryEdit = () => {
     setInput((prevState) => ({...prevState,[e.target.name]: e.target.value}));
   };
 
-  const handleCategoryUpdate = async () => {
+  const handleSubCategoryUpdate = async () => {
     try {
       setIsLoading(true);
-      const res = await axiosInstance.put(`${Constants.BASE_URL}/categories/${params.id}`, input)
+      const res = await axiosInstance.put(`${Constants.BASE_URL}/sub-categories/${params.id}`, input)
+
       if (res?.data?.status == 'success') {
         SweetAlert.successAlertMsm(res.data.status, res.data.message);        
         setIsLoading(false);
-        navigate("/category/list");
+        navigate("/sub-category/list");
       }else{
         SweetAlert.successAlertMsm('error', 'Category create failed');   
-        setError(res.data.response.data.errors)
+        setError(res.response.data.errors)
       }
     } catch (error) {
       setIsLoading(false);
@@ -71,19 +92,45 @@ const CategoryEdit = () => {
   };
 
   useEffect(() => {
-    getCategory();
+    getSubCategory();
+    getCategories();
   }, [])
   
 
   return (
     <>
-      <BreadCrumb title={"Add Category"} />
+      <BreadCrumb title={"Edit Sub Category"} />
       <div className="row">
         <div className="col-md-12">
           <div className="card">
-            <CardHeader title='Add Category' location='/category/list' buttonText='List' buttonIcon='fa-solid fa-plus me-2 text-light'/>
+            <CardHeader title='Edit Sub Category' location='/sub-category/list' buttonText='List' buttonIcon='fa-solid fa-plus me-2 text-light'/>
             <div className="card-body">
               <div className="row">
+              <div className="col-md-6">
+                <label htmlFor="" className="mt-4">
+                    Categories
+                  </label>
+
+                  <select className={ errors.category_id != undefined ? "form-select mt-2 is-invalid" : "form-select mt-2" }
+                    name={'category_id'}
+                    value={input.category_id}
+                    onChange={handleInput}
+                    >
+                    {Array.isArray(category) && category.length > 0 ? (
+                      category.map((item, index) => (
+                        <option key={index} value={item.id}>
+                          {item.name}
+                        </option>
+                      ))
+                    ) : (
+                      <option>No categories available</option>
+                    )}
+                  </select>
+
+                  <p className="text-danger">
+                    {errors?.category_id != undefined ? errors?.category_id[0] : null}
+                  </p>
+                </div>
                 <div className="col-md-6">
                   <label htmlFor="" className="mt-4">
                     Name
@@ -211,7 +258,7 @@ const CategoryEdit = () => {
                   <div className="row justify-content-center">
                     <div className="col-md-4">
                       <div className="d-grid">
-                        <button className="btn btn-success" onClick={handleCategoryUpdate}
+                        <button className="btn btn-success" onClick={handleSubCategoryUpdate}
                           dangerouslySetInnerHTML={{
                             __html: isLoading
                               ? '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> Loading....'

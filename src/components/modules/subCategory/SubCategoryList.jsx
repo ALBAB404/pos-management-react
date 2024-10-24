@@ -68,14 +68,14 @@ const CategoryList = () => {
 //Modla photo showign end
 
 //Modlacategory showing start
-    const handleCategoryShowing = (category) => {
+    const handleSubCategoryShowing = (category) => {
       setCategory(category);
       setModalShow(true)
     }
 //Modla category showing end
 
 //category delete start
-    const handleCategoryDelete = async (categoryId) => {
+    const handleSubCategoryDelete = async (categoryId) => {
       Swal.fire({
         title: "Are you sure?",
         text: "Category Will Be Deleted!",
@@ -198,7 +198,7 @@ const CategoryList = () => {
                     <tr>
                       <th>SL</th>
                       <th>Name / Slug</th>
-                      <th>Serial / Status</th>
+                      <th>Serial / Status / category</th>
                       <th>Photo</th>
                       <th>Created By</th>
                       <th>Date Time</th>
@@ -217,6 +217,7 @@ const CategoryList = () => {
                           <td>
                             <p className={"text-success"}>{category.serial}</p>
                             <p className={"text-info"}>{category.status}</p>
+                            <p className={"text-dark"}>{category.category_name}</p>
                           </td>
                           <td>
                             <img
@@ -236,9 +237,9 @@ const CategoryList = () => {
                             </p>
                           </td>
                           <td>
-                            <button className="btn btn-sm btn-info mx-1" onClick={()=>{handleCategoryShowing(category)}}><i className="fa-solid fa-eye"></i></button>
-                            <Link to={`/category/edit/${category.id}`}><button className="btn btn-sm btn-warning mx-1"><i className="fa-solid fa-edit"></i></button></Link>
-                            <button className="btn btn-sm btn-danger mx-1" onClick={()=>{handleCategoryDelete(category.id)}}><i className="fa-solid fa-trash"></i></button>
+                            <button className="btn btn-sm btn-info mx-1" onClick={()=>{handleSubCategoryShowing(category)}}><i className="fa-solid fa-eye"></i></button>
+                            <Link to={`/sub-category/edit/${category.id}`}><button className="btn btn-sm btn-warning mx-1"><i className="fa-solid fa-edit"></i></button></Link>
+                            <button className="btn btn-sm btn-danger mx-1" onClick={()=>{handleSubCategoryDelete(category.id)}}><i className="fa-solid fa-trash"></i></button>
                           </td>
                         </tr>
                       ))
