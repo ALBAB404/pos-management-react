@@ -4,12 +4,18 @@ export { default as AuthLayout } from "@/components/layouts/AuthLayout.jsx";
 
 export { default as Dashboard } from "@/components/modules/Dashboard.jsx";
 export { default as Login } from "@/components/modules/auth/Login.jsx";
+
 export { default as CategoryAdd } from "@/components/modules/category/CategoryAdd.jsx";
 export { default as CategoryList } from "@/components/modules/category/CategoryList.jsx";
 export { default as CategoryEdit } from "@/components/modules/category/CategoryEdit.jsx";
+
 export { default as SubCategoryAdd } from "@/components/modules/subCategory/SubCategoryAdd.jsx";
 export { default as SubCategoryList } from "@/components/modules/subCategory/SubCategoryList.jsx";
 export { default as SubCategoryEdit } from "@/components/modules/subCategory/SubCategoryEdit.jsx";
+
+export { default as BrandAdd } from "@/components/modules/brand/BrandAdd.jsx";
+export { default as BrandList } from "@/components/modules/brand/BrandList.jsx";
+export { default as BrandEdit } from "@/components/modules/brand/BrandEdit.jsx";
 
 
 export { default as Footer } from "@/components/partials/Footer.jsx";
