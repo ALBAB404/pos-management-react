@@ -25,6 +25,10 @@ export { default as BreadCrumb } from "@/components/partials/BreadCrumb.jsx";
 
 
 export { default as CardHeader } from "@/components/partials/miniComponent/CardHeader.jsx";
+export { default as TextInputFeild } from "@/components/partials/miniComponent/TextInputFeild.jsx";
+export { default as Table } from "@/components/partials/miniComponent/Table.jsx";
+export { default as TableHeader } from "@/components/partials/miniComponent/TableHeader.jsx";
+export { default as TableFooter } from "@/components/partials/miniComponent/TableFooter.jsx";
 
 
 export { default as CategoryPhotoModal } from "@/components/partials/modals/CategoryPhotoModal.jsx";
