@@ -4,6 +4,7 @@ import { BreadCrumb, Table } from "@/components";
 
 
 const BrandList = () => {
+  const ignorFeilds = ["photo_full", "created_by", "created_at", "updated_at"]
 
 
   return (
@@ -15,6 +16,7 @@ const BrandList = () => {
        api_end_point_url={"brands"}
        CategoryPhotoModal={"Brand Photo"}
        CategoryDetailsModal={"Brand Details"}
+       ignorFeilds={ignorFeilds}
      />
     </>
   );

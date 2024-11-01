@@ -2,13 +2,14 @@ import Constants from "@/Constants";
 import { useEffect, useState } from "react";
 import ReactPaginate from 'react-js-pagination';
 import axiosInstance from "@/services/axiosService.js";
-import { BreadCrumb, CardHeader, CategoryPhotoModal, CategoryDetailsModal, TableSkeleton } from "@/components";
+import { BreadCrumb, Table } from "@/components";
 import { Link } from "react-router-dom";
 import Swal from 'sweetalert2'
 import SweetAlert from "../../../CommonFunction/SweetAlert";
 
 
 const CategoryList = () => {
+  const ignorFeilds = ["photo_full", "created_by", "created_at", "updated_at"]
   
 // All Searching Variables start
   const [input, setInput] = useState({
@@ -111,186 +112,14 @@ const CategoryList = () => {
   return (
     <>
       <BreadCrumb title={"Sub Category List"} />
-      <div className="row">
-        <div className="col-md-12">
-          <div className="card mb-4">
-            <CardHeader
-              title="Category List"
-              location="/sub-category/create"
-              buttonText="Add"
-              buttonIcon="fa-solid fa-bars me-2 text-light"
-            />
-            <div className="card-body">
-
-            <div className="search-area mb-4">
-               <div className="row">
-                  <div className="col-md-3">
-                    <label className="w-100">
-                      <span>Search</span>
-                      <input
-                          className="form-control form-control-sm my-2"
-                          type={'search'}
-                          name={'search'}
-                          value={input.search}
-                          onChange={handleSearch}
-                          placeholder="Searching ...."
-                        />
-                    </label>
-                  </div>
-                  <div className="col-md-3">
-                    <label className="w-100">
-                      <span>Order By</span>
-                      <select
-                          className="form-select form-select-sm my-2"
-                          name={'order_by'}
-                          value={input.order_by}
-                          onChange={handleSearch}
-                        >
-                          <option value={"name"}>Name</option>
-                          <option value={"slug"}>Created At</option>
-                          <option value={"created_at"}>Updated At</option>
-                          <option value={"status"}>Status</option>
-                          <option value={"serial"}>Serial</option>
-                        </select>
-
-                    </label>
-                  </div>
-                  <div className="col-md-2">
-                    <label className="w-100">
-                      <span>Order Direction</span>
-                      <select
-                          className="form-select form-select-sm my-2"
-                          name={'direction'}
-                          value={input.direction}
-                          onChange={handleSearch}
-                        >
-                          <option value={"asc"}>Asc</option>
-                          <option value={"desc"}>Desc</option>
-                        </select>
-                    </label>
-                  </div>
-                  <div className="col-md-2">
-                    <label className="w-100">
-                      <span>Order By Per Page</span>
-                      <select
-                          className="form-select form-select-sm my-2"
-                          name={'direction'}
-                          value={input.per_page}
-                          onChange={handleSearch}
-                        >
-                          <option value={10}>10</option>
-                          <option value={25}>25</option>
-                          <option value={50}>50</option>
-                          <option value={100}>100</option>
-                        </select>
-                    </label>
-                  </div>
-                  <div className="col-md-2">
-                    <div className="d-grid mt-4">
-                      <button className="btn btn-sm btn-success my-2" onClick={()=> getSubCategoryList(1)}><i className="fa-solid fa-magnifying-glass"></i> Search</button>
-                    </div>
-                  </div>
-               </div>
-            </div>
-              <div className="table-responsive">
-                <table className="my-table table table-striped table-hover table-bordered">
-                  <thead>
-                    <tr>
-                      <th>SL</th>
-                      <th>Name / Slug</th>
-                      <th>Serial / Status / category</th>
-                      <th>Photo</th>
-                      <th>Created By</th>
-                      <th>Date Time</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {categories && categories.length > 0 ? (
-                      categories.map((category, index) => (
-                        <tr key={index}>
-                          <td>{startForm + index}</td>
-                          <td>
-                            <p className={"text-success"}>{category.name}</p>
-                            <p className={"text-info"}>{category.slug}</p>
-                          </td>
-                          <td>
-                            <p className={"text-success"}>{category.serial}</p>
-                            <p className={"text-info"}>{category.status}</p>
-                            <p className={"text-dark"}>{category.category_name}</p>
-                          </td>
-                          <td>
-                            <img
-                              onClick={() => handlePhotoModal(category.photo_full)}
-                              src={category.photo}
-                              alt={category.name}
-                              className={"img-thumbnail table-img"}
-                            />
-                          </td>
-                          <td>{category.created_by}</td>
-                          <td>
-                            <p className={"text-success"}>
-                              <small>{category.created_at}</small>{" "}
-                            </p>
-                            <p className={"text-info"}>
-                              <small>{category.updated_at}</small>{" "}
-                            </p>
-                          </td>
-                          <td>
-                            <button className="btn btn-sm btn-info mx-1" onClick={()=>{handleSubCategoryShowing(category)}}><i className="fa-solid fa-eye"></i></button>
-                            <Link to={`/sub-category/edit/${category.id}`}><button className="btn btn-sm btn-warning mx-1"><i className="fa-solid fa-edit"></i></button></Link>
-                            <button className="btn btn-sm btn-danger mx-1" onClick={()=>{handleSubCategoryDelete(category.id)}}><i className="fa-solid fa-trash"></i></button>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      loading ? <TableSkeleton trForItem={9} tdForItem={7} /> :
-                      <tr>
-                        <td colSpan={7} className="text-center">
-                          <p>No data found</p>
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-
-                <CategoryPhotoModal
-                  title={'Category Photo'}
-                  photo={modalPhoto}
-                  size={'lg'}
-                  show={modalPhotoShow}
-                  onHide={() => setModalPhotoShow(false)}
-                />
-
-                <CategoryDetailsModal
-                  title={'Category Details Show'}
-                  category={category}
-                  size={'lg'}
-                  show={modalShow}
-                  onHide={() => setModalShow(false)}
-                />
-              </div>
-            </div>
-            <div className="cart-footer">
-              <nav className="pagination-sm ms-3">
-                <ReactPaginate
-                    activePage={activePage}
-                    itemsCountPerPage={itemsCountPerPage}
-                    totalItemsCount={totalItemsCount}
-                    onChange={getSubCategoryList}
-                    pageRangeDisplayed={5}
-                    nextPageText={'next'}
-                    firstPageText={'first'}
-                    prevPageText={'previous'}
-                    lastPageText={'last'}
-                    itemClass={'page-item'}
-                    linkClass={'page-link'}
-                />
-              </nav>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Table
+        CardHeaderTitle={'Sub Category List'}
+        CardHeaderAddButtonLocation={"/sub-category/create"}
+        api_end_point_url={"sub-categories"}
+        CategoryPhotoModal={"Sub Category Photo"}
+        CategoryDetailsModal={"Sub Category Details"}
+        ignorFeilds={ignorFeilds}
+      />
     </>
   );
 };
