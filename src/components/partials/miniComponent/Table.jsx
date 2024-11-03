@@ -6,6 +6,7 @@ import {
   CardHeader,
   CategoryPhotoModal,
   CategoryDetailsModal,
+  DataCreateAndEditModal,
   TableSkeleton,
 } from "@/components";
 import { Link } from "react-router-dom";
@@ -32,6 +33,7 @@ const Table = (props) => {
   //Modla photo showign start
   const [modalShow, setModalShow] = useState(false);
   const [modalPhotoShow, setModalPhotoShow] = useState(false);
+  const [dataCreateAndEditModalShow, setDataCreateAndEditModalShow] = useState(false);
   const [modalPhoto, setModalPhoto] = useState("");
   //Modla photo showign end
   //Modla category showing start
@@ -71,7 +73,8 @@ const Table = (props) => {
 
   //Modla photo showign start
   const handlePhotoModal = (photo) => {
-    setModalPhoto(photo);
+    const fullPhoto = categories.filter((i)=> i.photo === photo)
+    setModalPhoto(fullPhoto[0].photo_full);
     setModalPhotoShow(true);
   };
   //Modla photo showign end
@@ -96,7 +99,7 @@ const Table = (props) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const response = await axiosInstance.delete(
-          `${Constants.BASE_URL}/categories/${categoryId}`
+          `${Constants.BASE_URL}/${props.api_end_point_url}/${categoryId}`
         );
         if (response.status == 200) {
           getCategoryList();
@@ -115,7 +118,7 @@ const Table = (props) => {
   // col data refilter and condition start
   const colRenderCellData = (key, value, index) => {
     if (key == "photo") {
-      return <img src={value} alt="" width={50} />;
+      return <img src={value} alt="" width={50} onClick={()=>handlePhotoModal(value)} />;
     }
     if (key == "id") {
       return <td>{startForm + index}</td>;
@@ -133,6 +136,14 @@ const Table = (props) => {
     }));
   };
   // searching part end
+  // create And Edit Modal Show And Hide end
+  const createAndEditModalShowAndHide = (value) => {
+    setDataCreateAndEditModalShow(value);
+  }
+  const handleModalClose = () => {
+    setDataCreateAndEditModalShow(false);
+  }
+  // create And Edit Modal Show And Hide end
 
   useEffect(() => {
     getCategoryList();
@@ -145,9 +156,10 @@ const Table = (props) => {
           <div className="card mb-4">
             <CardHeader
               title={props.CardHeaderTitle}
-              location={props.CardHeaderAddButtonLocation}
+              createAndEditModalShowAndHide={createAndEditModalShowAndHide}
               buttonText="Add"
               buttonIcon="fa-solid fa-bars me-2 text-light"
+              handleModalClose={dataCreateAndEditModalShow}
             />
             <div className="card-body">
               <div className="search-area mb-4">
@@ -272,6 +284,16 @@ const Table = (props) => {
                   show={modalPhotoShow}
                   onHide={() => setModalPhotoShow(false)}
                 />
+
+
+                <DataCreateAndEditModal
+                  title={`${props.CategoryDetailsModal}`}
+                  category={category}
+                  size={"xl"}
+                  show={dataCreateAndEditModalShow}
+                  onHide={handleModalClose}
+                />
+
 
                 <CategoryDetailsModal
                   title={`${props.CategoryDetailsModal}`}

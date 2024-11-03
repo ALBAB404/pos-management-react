@@ -33,6 +33,7 @@ export { default as TableFooter } from "@/components/partials/miniComponent/Tabl
 
 export { default as CategoryPhotoModal } from "@/components/partials/modals/CategoryPhotoModal.jsx";
 export { default as CategoryDetailsModal } from "@/components/partials/modals/CategoryDetailsModal.jsx";
+export { default as DataCreateAndEditModal } from "@/components/partials/modals/DataCreateAndEditModal.jsx";
 
 
 export { default as TableSkeleton } from "@/components/partials/skeleton/TableSkeleton.jsx";
